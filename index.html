@@ -697,63 +697,71 @@
     // Initialize everything
     createParticles();
 
-    /* ---------------- THEME TOGGLE ---------------- */
-    const themeToggleBtn = document.getElementById('themeToggle');
-    function toggleTheme() {
-      document.body.classList.toggle('light-theme');
-      const isLight = document.body.classList.contains('light-theme');
-      themeToggleBtn.innerHTML = isLight ? '<i class="fas fa-sun"></i>' : '<i class="fas fa-moon"></i>';
-    }
+   <!-- THEME TOGGLE -->
+<script>
+  const themeToggleBtn = document.getElementById('themeToggle');
+  function toggleTheme() {
+    document.body.classList.toggle('light-theme');
+    const isLight = document.body.classList.contains('light-theme');
+    themeToggleBtn.innerHTML = isLight
+      ? '<i class="fas fa-sun"></i>'
+      : '<i class="fas fa-moon"></i>';
+  }
+</script>
 
-    <script>
+<!-- MUSIC PLAYER + AUTO UNMUTE -->
+<script>
   // ---------------- MUSIC PLAYER ----------------
-  const bgm = document.getElementById("bgm");
-  const musicButton = document.querySelector(".music-button");
-  const visualizer = document.getElementById("visualizer");
+  const bgm = document.getElementById('bgm');
+  const musicButton = document.querySelector('.music-button');
+  const visualizer = document.getElementById('visualizer');
 
   function toggleMusic() {
     if (bgm.paused) {
-      bgm.play().then(() => {
-        musicButton.innerHTML = '<i class="fas fa-pause"></i> Tắt nhạc';
-        visualizer.style.display = 'flex';
-      }).catch(() => {
-        musicButton.innerHTML = '<i class="fas fa-pause"></i> Tắt nhạc';
-        visualizer.style.display = 'flex';
-      });
+      bgm.play().then(showPlaying).catch(showPlaying);
     } else {
       bgm.pause();
-      musicButton.innerHTML = '<i class="fas fa-play"></i> Phát nhạc';
-      visualizer.style.display = 'none';
+      showPaused();
     }
   }
 
-  // Hide visualizer by default
+  function showPlaying() {
+    musicButton.innerHTML = '<i class="fas fa-pause"></i> Tắt nhạc';
+    visualizer.style.display = 'flex';
+  }
+
+  function showPaused() {
+    musicButton.innerHTML = '<i class="fas fa-play"></i> Phát nhạc';
+    visualizer.style.display = 'none';
+  }
+
+  // Ẩn visualizer mặc định
   visualizer.style.display = 'none';
 
   // ---------------- AUTO UNMUTE ON LOAD ----------------
   function autoPlayMusic() {
     if (!bgm) return;
     bgm.muted = true;
-    const playPromise = bgm.play();
 
+    const playPromise = bgm.play();
     if (playPromise !== undefined) {
       playPromise
-        .then(() => {
-          setTimeout(() => {
-            bgm.muted = false;
-          }, 500);
-        })
+        .then(() => setTimeout(() => (bgm.muted = false), 500))
         .catch(() => {
-          document.addEventListener("click", () => {
-            bgm.muted = false;
-            bgm.play();
-          }, { once: true });
+          document.addEventListener(
+            'click',
+            () => {
+              bgm.muted = false;
+              bgm.play();
+            },
+            { once: true }
+          );
         });
     }
   }
 
-  window.addEventListener("load", autoPlayMusic);
-<script>
+  window.addEventListener('load', autoPlayMusic);
+</script>
 
 
     /* ---------------- HELLO TEXT ---------------- */
