@@ -749,36 +749,6 @@
     setInterval(updateDateTime, 1000);
     updateDateTime();
 
-    /* ---------------- VISITOR COUNTER ---------------- */
-    <script>
-  async function animateCounter() {
-    const counter = document.getElementById('visitorCount');
-    if (!counter) return;
-
-    try {
-      const res = await fetch("https://script.google.com/macros/s/AKfycbwTET_pjxS3WJDz4lj7fXt07w08cc-vY2cFydHsiAFnUL7TsEyCkOGqw-zI7AS9O6Cxjw/exec");
-      if (!res.ok) throw new Error("Fetch failed: " + res.status);
-      const data = await res.json();
-      const target = data.count;
-
-      let current = 0;
-      const increment = target / 100;
-      const timer = setInterval(() => {
-        current += increment;
-        if (current >= target) {
-          counter.textContent = target.toLocaleString();
-          clearInterval(timer);
-        } else {
-          counter.textContent = Math.floor(current).toLocaleString();
-        }
-      }, 20);
-    } catch (e) {
-      console.error("Không thể lấy lượt truy cập", e);
-    }
-  }
-
-  setTimeout(animateCounter, 2000);
-</script>
 
     /* ---------------- RANDOM QUOTE ---------------- */
     const quotes = [
@@ -908,7 +878,12 @@
     if (!counter) return;
 
     try {
-      const res = await fetch("https://script.google.com/macros/s/AKfycbwTET_pjxS3WJDz4lj7fXt07w08cc-vY2cFydHsiAFnUL7TsEyCkOGqw-zI7AS9O6Cxjw/exec");
+      const res = await fetch("https://script.google.com/macros/s/AKfycbyfpFpRGA1VHVpbDYJ5cPSipMA9ZG_nEa_m1jwsYZAo1Q3YL1cTQL1Wj3JddaE2YcrayQ/exec");
+
+      if (!res.ok || !res.headers.get("content-type")?.includes("application/json")) {
+        throw new Error("API trả về nội dung không hợp lệ");
+      }
+
       const data = await res.json();
       const target = data.count;
 
@@ -925,6 +900,7 @@
       }, 20);
     } catch (e) {
       console.error("Không thể lấy lượt truy cập", e);
+      counter.textContent = '0';
     }
   }
 
