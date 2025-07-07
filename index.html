@@ -84,7 +84,7 @@
       left: 0;
       width: 200%;
       height: 100%;
-      background: url('https://www.transparenttextures.com/patterns/clouds.png') repeat-x;
+      background: url('https://www.transparenttextures.com/patterns/stardust.png') repeat-x;
       animation: moveClouds 120s linear infinite;
       opacity: 0.05;
       z-index: -2;
@@ -568,16 +568,33 @@
     
     <div id="datetime" class="glass-datetime"></div>
 
-    <!-- Weather Widget -->
-    <div class="weather-widget">
-      <div class="weather-info">
-        <div>
-          <i class="fas fa-cloud-sun"></i>
-          <span id="weatherLocation">Quảng Ngãi</span>
-        </div>
-        <div class="weather-temp">29°C</div>
-      </div>
-    </div>
+    <!-- WEATHER SCRIPT -->
+  <script>
+    const weatherLocation = document.getElementById('weatherLocation');
+    const weatherTemp = document.querySelector('.weather-temp');
+
+    async function updateWeather() {
+      try {
+        const apiKey = 'ffe06c65252d54d69c387bb629d95cad';
+        const city = 'Quang Ngai';
+        const url = `https://api.openweathermap.org/data/2.5/weather?q=${city}&units=metric&appid=${apiKey}&lang=vi`;
+
+        const res = await fetch(url);
+        const data = await res.json();
+        const temp = Math.round(data.main.temp);
+        const description = data.weather[0].description;
+
+        weatherTemp.innerHTML = `${temp}°C`;
+        weatherLocation.innerHTML = `<i class="fas fa-cloud-sun"></i> ${city} • ${description}`;
+      } catch (e) {
+        console.error('Không thể lấy thông tin thời tiết', e);
+        weatherTemp.innerHTML = '--';
+      }
+    }
+
+    updateWeather();
+    setInterval(updateWeather, 60000); // cập nhật mỗi phút
+  </script>
 
     <!-- Visitor Counter -->
     <div class="visitor-counter">
