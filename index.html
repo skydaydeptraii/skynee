@@ -645,8 +645,7 @@
       </div>
     </div>
   </div>
-
-  <!-- AUDIO -->
+ <!-- AUDIO -->
   <audio id="bgm" loop>
     <source src="votinhremix.mp3">
   </audio>
@@ -668,7 +667,7 @@
   </div>
 
   <script>
-    // Initialize particles
+    // --------- PARTICLES ---------
     function createParticles() {
       const particles = document.getElementById('particles');
       for (let i = 0; i < 50; i++) {
@@ -684,7 +683,7 @@
       }
     }
 
-    // Loading screen
+    // --------- LOADING SCREEN ---------
     window.addEventListener('load', () => {
       setTimeout(() => {
         document.getElementById('loadingOverlay').style.opacity = '0';
@@ -693,80 +692,59 @@
         }, 500);
       }, 1500);
     });
-
-    // Initialize everything
     createParticles();
 
-   <!-- THEME TOGGLE -->
- <script>
-  const themeToggleBtn = document.getElementById('themeToggle');
-
-  function toggleTheme() {
-    document.body.classList.toggle('light-theme');
-    const isLight = document.body.classList.contains('light-theme');
-    themeToggleBtn.innerHTML = isLight
-      ? "<i class='fas fa-sun'></i>"
-      : "<i class='fas fa-moon'></i>";
-  }
- </script>
-
-
-<!-- MUSIC PLAYER + AUTO UNMUTE -->
-<script>
-  // ---------------- MUSIC PLAYER ----------------
-  const bgm = document.getElementById('bgm');
-  const musicButton = document.querySelector('.music-button');
-  const visualizer = document.getElementById('visualizer');
-
-  function toggleMusic() {
-    if (bgm.paused) {
-      bgm.play().then(showPlaying).catch(showPlaying);
-    } else {
-      bgm.pause();
-      showPaused();
+    // --------- THEME TOGGLE ---------
+    const themeToggleBtn = document.getElementById('themeToggle');
+    function toggleTheme() {
+      document.body.classList.toggle('light-theme');
+      const isLight = document.body.classList.contains('light-theme');
+      themeToggleBtn.innerHTML = isLight
+        ? "<i class='fas fa-sun'></i>"
+        : "<i class='fas fa-moon'></i>";
     }
-  }
 
-  function showPlaying() {
-    musicButton.innerHTML = '<i class="fas fa-pause"></i> Tắt nhạc';
-    visualizer.style.display = 'flex';
-  }
+    // --------- MUSIC PLAYER ---------
+    const bgm = document.getElementById('bgm');
+    const musicButton = document.querySelector('.music-button');
+    const visualizer = document.getElementById('visualizer');
 
-  function showPaused() {
-    musicButton.innerHTML = '<i class="fas fa-play"></i> Phát nhạc';
+    function toggleMusic() {
+      if (bgm.paused) {
+        bgm.play().then(showPlaying).catch(showPlaying);
+      } else {
+        bgm.pause();
+        showPaused();
+      }
+    }
+    function showPlaying() {
+      musicButton.innerHTML = '<i class="fas fa-pause"></i> Tắt nhạc';
+      visualizer.style.display = 'flex';
+    }
+    function showPaused() {
+      musicButton.innerHTML = '<i class="fas fa-play"></i> Phát nhạc';
+      visualizer.style.display = 'none';
+    }
     visualizer.style.display = 'none';
-  }
 
-  // Ẩn visualizer mặc định
-  visualizer.style.display = 'none';
-
-  // ---------------- AUTO UNMUTE ON LOAD ----------------
-  function autoPlayMusic() {
-    if (!bgm) return;
-    bgm.muted = true;
-
-    const playPromise = bgm.play();
-    if (playPromise !== undefined) {
-      playPromise
-        .then(() => setTimeout(() => (bgm.muted = false), 500))
-        .catch(() => {
-          document.addEventListener(
-            'click',
-            () => {
-              bgm.muted = false;
-              bgm.play();
-            },
-            { once: true }
-          );
+    function autoPlayMusic() {
+      if (!bgm) return;
+      bgm.muted = true;
+      const playPromise = bgm.play();
+      if (playPromise !== undefined) {
+        playPromise.then(() => {
+          setTimeout(() => { bgm.muted = false; }, 500);
+        }).catch(() => {
+          document.addEventListener("click", () => {
+            bgm.muted = false;
+            bgm.play();
+          }, { once: true });
         });
+      }
     }
-  }
+    window.addEventListener('load', autoPlayMusic);
 
-  window.addEventListener('load', autoPlayMusic);
-</script>
-
-
-    /* ---------------- HELLO TEXT ---------------- */
+    // --------- HELLO TEXT ---------
     function showHello() {
       const helloText = document.getElementById("helloText");
       helloText.style.display = "block";
@@ -774,7 +752,7 @@
       setTimeout(() => helloText.style.display = "none", 3000);
     }
 
-    /* ---------------- DATE TIME ---------------- */
+    // --------- DATE TIME ---------
     function updateDateTime() {
       const now = new Date();
       const days = ['Chủ nhật','Thứ hai','Thứ ba','Thứ tư','Thứ năm','Thứ sáu','Thứ bảy'];
@@ -786,8 +764,7 @@
     setInterval(updateDateTime, 1000);
     updateDateTime();
 
-
-    /* ---------------- RANDOM QUOTE ---------------- */
+    // --------- RANDOM QUOTE ---------
     const quotes = [
       '"Sống không phải để tồn tại, mà để toả sáng ✨"',
       '"Giữ chất riêng, sống chill đúng chất 💭"',
@@ -798,7 +775,7 @@
     ];
     document.getElementById("randomQuote").textContent = quotes[Math.floor(Math.random() * quotes.length)];
 
-    /* ---------------- TYPEWRITER ---------------- */
+    // --------- TYPEWRITER ---------
     const typeText = "Sky đang online... 🌟";
     let typeIndex = 0;
     function typeWriter() {
@@ -806,48 +783,28 @@
         document.getElementById("typewriter").textContent = typeText.slice(0, typeIndex++);
         setTimeout(typeWriter, 100);
       } else {
-        // Reset and start again
-        setTimeout(() => {
-          typeIndex = 0;
-          typeWriter();
-        }, 3000);
+        setTimeout(() => { typeIndex = 0; typeWriter(); }, 3000);
       }
     }
     typeWriter();
 
-    /* ---------------- TOGGLE NIGHT CHILL MODE ---------------- */
+    // --------- NIGHT CHILL ---------
     function toggleNightChill() {
       document.body.classList.toggle('night-chill');
     }
 
-    /* ---------------- TOGGLE ABOUT POPUP ---------------- */
+    // --------- ABOUT POPUP ---------
     function toggleAbout() {
       const popup = document.getElementById("aboutPopup");
       popup.style.display = (popup.style.display === "flex") ? "none" : "flex";
     }
 
-    /* ---------------- AUTO HIDE LOADING SCREEN ---------------- */
-    // Hide loading screen immediately on DOM ready
-    document.addEventListener('DOMContentLoaded', function() {
-      setTimeout(() => {
-        const loadingOverlay = document.getElementById('loadingOverlay');
-        if (loadingOverlay) {
-          loadingOverlay.style.opacity = '0';
-          setTimeout(() => {
-            loadingOverlay.style.display = 'none';
-          }, 500);
-        }
-      }, 800);
-    });
-
-    /* ---------------- EASTER EGGS & INTERACTIONS ---------------- */
-    // Click effects
+    // --------- EASTER EGG ---------
     document.addEventListener('click', function(e) {
       if (e.target.classList.contains('avatar')) {
         createClickEffect(e.pageX, e.pageY);
       }
     });
-
     function createClickEffect(x, y) {
       const effect = document.createElement('div');
       effect.style.cssText = `
@@ -862,59 +819,42 @@
         z-index: 9999;
         animation: explode 0.6s ease-out forwards;
       `;
-      
       document.body.appendChild(effect);
       setTimeout(() => effect.remove(), 600);
     }
-
-    // Add explode animation
     const style = document.createElement('style');
-    style.textContent = `
-      @keyframes explode {
-        0% { transform: scale(0); opacity: 1; }
-        100% { transform: scale(3); opacity: 0; }
-      }
-    `;
+    style.textContent = `@keyframes explode { 0% { transform: scale(0); opacity: 1; } 100% { transform: scale(3); opacity: 0; } }`;
     document.head.appendChild(style);
-  </script>
 
-
-<!-- GOOGLE SHEETS COUNTER -->
-<script>
-  async function animateCounter() {
-    const counter = document.getElementById('visitorCount');
-    if (!counter) return;
-
-    try {
-      const res = await fetch("https://script.google.com/macros/s/AKfycbyfpFpRGA1VHVpbDYJ5cPSipMA9ZG_nEa_m1jwsYZAo1Q3YL1cTQL1Wj3JddaE2YcrayQ/exec");
-
-      if (!res.ok || !res.headers.get("content-type")?.includes("application/json")) {
-        throw new Error("API trả về nội dung không hợp lệ");
-      }
-
-      const data = await res.json();
-      const target = data.count;
-
-      let current = 0;
-      const increment = target / 100;
-      const timer = setInterval(() => {
-        current += increment;
-        if (current >= target) {
-          counter.textContent = target.toLocaleString();
-          clearInterval(timer);
-        } else {
-          counter.textContent = Math.floor(current).toLocaleString();
+    // --------- VISITOR COUNTER (Google Sheets) ---------
+    async function animateCounter() {
+      const counter = document.getElementById('visitorCount');
+      if (!counter) return;
+      try {
+        const res = await fetch("https://script.google.com/macros/s/AKfycbyfpFpRGA1VHVpbDYJ5cPSipMA9ZG_nEa_m1jwsYZAo1Q3YL1cTQL1Wj3JddaE2YcrayQ/exec");
+        if (!res.ok || !res.headers.get("content-type")?.includes("application/json")) {
+          throw new Error("API trả về nội dung không hợp lệ");
         }
-      }, 20);
-    } catch (e) {
-      console.error("Không thể lấy lượt truy cập", e);
-      counter.textContent = '0';
+        const data = await res.json();
+        const target = data.count;
+        let current = 0;
+        const increment = target / 100;
+        const timer = setInterval(() => {
+          current += increment;
+          if (current >= target) {
+            counter.textContent = target.toLocaleString();
+            clearInterval(timer);
+          } else {
+            counter.textContent = Math.floor(current).toLocaleString();
+          }
+        }, 20);
+      } catch (e) {
+        console.error("Không thể lấy lượt truy cập", e);
+        counter.textContent = '0';
+      }
     }
-  }
-
-  setTimeout(animateCounter, 2000);
-</script>
-
+    setTimeout(animateCounter, 2000);
+  </script>
 
 
 
