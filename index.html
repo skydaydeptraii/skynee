@@ -705,29 +705,56 @@
       themeToggleBtn.innerHTML = isLight ? '<i class="fas fa-sun"></i>' : '<i class="fas fa-moon"></i>';
     }
 
-    /* ---------------- MUSIC PLAYER ---------------- */
-    const bgm = document.getElementById("bgm");
-    const musicButton = document.querySelector(".music-button");
-    const visualizer = document.getElementById("visualizer");
+    <script>
+  // ---------------- MUSIC PLAYER ----------------
+  const bgm = document.getElementById("bgm");
+  const musicButton = document.querySelector(".music-button");
+  const visualizer = document.getElementById("visualizer");
 
-    function toggleMusic() {
-      if (bgm.paused) {
-        bgm.play().then(() => {
-          musicButton.innerHTML = '<i class="fas fa-pause"></i> Tắt nhạc';
-          visualizer.style.display = 'flex';
-        }).catch(err => {
-          musicButton.innerHTML = '<i class="fas fa-pause"></i> Tắt nhạc';
-          visualizer.style.display = 'flex';
-        });
-      } else {
-        bgm.pause();
-        musicButton.innerHTML = '<i class="fas fa-play"></i> Phát nhạc';
-        visualizer.style.display = 'none';
-      }
+  function toggleMusic() {
+    if (bgm.paused) {
+      bgm.play().then(() => {
+        musicButton.innerHTML = '<i class="fas fa-pause"></i> Tắt nhạc';
+        visualizer.style.display = 'flex';
+      }).catch(() => {
+        musicButton.innerHTML = '<i class="fas fa-pause"></i> Tắt nhạc';
+        visualizer.style.display = 'flex';
+      });
+    } else {
+      bgm.pause();
+      musicButton.innerHTML = '<i class="fas fa-play"></i> Phát nhạc';
+      visualizer.style.display = 'none';
     }
+  }
 
-    // Hide visualizer by default
-    visualizer.style.display = 'none';
+  // Hide visualizer by default
+  visualizer.style.display = 'none';
+
+  // ---------------- AUTO UNMUTE ON LOAD ----------------
+  function autoPlayMusic() {
+    if (!bgm) return;
+    bgm.muted = true;
+    const playPromise = bgm.play();
+
+    if (playPromise !== undefined) {
+      playPromise
+        .then(() => {
+          setTimeout(() => {
+            bgm.muted = false;
+          }, 500);
+        })
+        .catch(() => {
+          document.addEventListener("click", () => {
+            bgm.muted = false;
+            bgm.play();
+          }, { once: true });
+        });
+    }
+  }
+
+  window.addEventListener("load", autoPlayMusic);
+</script>
+
 
     /* ---------------- HELLO TEXT ---------------- */
     function showHello() {
@@ -840,35 +867,6 @@
     `;
     document.head.appendChild(style);
   </script>
-
-<!-- AUTO UNMUTE MUSIC -->
-<script>
-  const bgm = document.getElementById("bgm");
-
-  function autoPlayMusic() {
-    bgm.muted = true;
-    const playPromise = bgm.play();
-
-    if (playPromise !== undefined) {
-      playPromise
-        .then(() => {
-          // Phát nhạc thành công (bị mute), đợi chút rồi bật âm
-          setTimeout(() => {
-            bgm.muted = false;
-          }, 500);
-        })
-        .catch(() => {
-          // Nếu trình duyệt chặn hoàn toàn, chờ click để bật
-          document.addEventListener("click", () => {
-            bgm.muted = false;
-            bgm.play();
-          }, { once: true });
-        });
-    }
-  }
-
-  window.addEventListener("load", autoPlayMusic);
-</script>
 
 
 <!-- GOOGLE SHEETS COUNTER -->
